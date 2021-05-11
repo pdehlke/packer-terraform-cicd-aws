@@ -11,7 +11,7 @@
 set -e
 
 # debug - expand all commands
-# set -x
+set -x
 
 # load our helper functions
 source scripts/common.sh
