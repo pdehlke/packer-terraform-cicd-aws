@@ -1,6 +1,4 @@
-provider "aws" {
-  version = "v2.70.0"
-}
+provider "aws" {}
 
 variable "vpc_main_cidr" {
   type = "string"
