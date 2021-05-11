@@ -40,6 +40,7 @@ else
         echo "Couldn't find ${BASE_NAME} in manifest-${BASE_NAME}.json, looking up AMI via EC2 API"
     fi
     export AMI_BASE="$(get_base_ami "$BASE_BUILT" "$BASE_NAME" "$BASE_NAME")"
+    echo "Found AMI_BASE $AMI_BASE via get_base_ami"
 fi
 
 export SHA=$(git ls-tree HEAD "$DIR" | cut -d" " -f3 | cut -f1)
