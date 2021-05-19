@@ -11,7 +11,7 @@
 #
 set -e
 # DEBUG
-#set -x
+set -x
 
 TERRAFORM_VERSION=0.11.15
 
