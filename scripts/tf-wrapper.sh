@@ -11,21 +11,7 @@
 #
 set -e
 # DEBUG
-set -x
-
-TERRAFORM_VERSION=0.11.15
-
-apk add --update git curl openssh gnupg && \
-    curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-    curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS.sig > terraform_${TERRAFORM_VERSION}_SHA256SUMS.sig && \
-    curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS > terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
-    gpg --import releases_public_key && \
-    gpg --verify terraform_${TERRAFORM_VERSION}_SHA256SUMS.sig terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
-    grep linux_amd64 terraform_${TERRAFORM_VERSION}_SHA256SUMS >terraform_${TERRAFORM_VERSION}_SHA256SUMS_linux_amd64 && \
-    sha256sum -cs terraform_${TERRAFORM_VERSION}_SHA256SUMS_linux_amd64 && \
-    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
-    rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip terraform_${TERRAFORM_VERSION}_SHA256SUMS*
-
+#set -x
 
 THIS_SCRIPT=${BASH_SOURCE[0]:-$0}
 # grumble, moan, PATH, symlinks
@@ -66,8 +52,7 @@ TF_VARS_FILE=$(map_branch_to_tfvars ${GIT_BRANCH})
 # create the S3 bucket, DynamoDB & matching backend.tf
 generate_terraform_backend
 
-#[[ ! -d .terraform ]] && terraform init
-terraform init
+[[ ! -d .terraform ]] && terraform init
 # the workspace may already exist - safe to ignore & carry on
 terraform workspace new ${TF_WORKSPACE} || true
 echo "Selecting workspace: ${TF_WORKSPACE}"
