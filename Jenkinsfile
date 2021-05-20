@@ -14,7 +14,7 @@ pipeline {
         stage('packer validate') {
           agent {
             docker {
-              image 'simonmcc/hashicorp-pipeline:latest'
+              image 'pdehlke/hashicorp-pipeline:latest'
               alwaysPull true
             }
           }
@@ -27,7 +27,7 @@ pipeline {
           }
         }
         stage('terraform fmt') {
-          agent { docker { image 'simonmcc/hashicorp-pipeline:latest' } }
+          agent { docker { image 'pdehlke/hashicorp-pipeline:latest' } }
           steps {
             checkout scm
             sh "terraform fmt -check=true -diff=true"
@@ -36,7 +36,7 @@ pipeline {
       }
     }
     stage('build AMIs') {
-      agent { docker { image 'simonmcc/hashicorp-pipeline:latest' } }
+      agent { docker { image 'pdehlke/hashicorp-pipeline:latest' } }
       steps {
         checkout scm
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
@@ -52,7 +52,7 @@ pipeline {
     }
 
     stage('build test stack') {
-      agent { docker { image 'simonmcc/hashicorp-pipeline:latest' } }
+      agent { docker { image 'pdehlke/hashicorp-pipeline:latest' } }
       when {
         expression { env.BRANCH_NAME != 'master' }
       }
@@ -113,7 +113,7 @@ pipeline {
       }
     }
     stage('destroy test stack') {
-      agent { docker { image 'simonmcc/hashicorp-pipeline:latest' } }
+      agent { docker { image 'pdehlke/hashicorp-pipeline:latest' } }
       when {
         expression { env.BRANCH_NAME != 'master' }
       }
@@ -130,7 +130,7 @@ pipeline {
       }
     }
     stage('terraform plan - master') {
-      agent { docker { image 'simonmcc/hashicorp-pipeline:latest' } }
+      agent { docker { image 'pdehlke/hashicorp-pipeline:latest' } }
       when {
         expression { env.BRANCH_NAME == 'master' }
       }
@@ -156,7 +156,7 @@ pipeline {
       }
     }
     stage('terraform apply - master') {
-      agent { docker { image 'simonmcc/hashicorp-pipeline:latest' } }
+      agent { docker { image 'pdehlke/hashicorp-pipeline:latest' } }
       when {
         expression { env.BRANCH_NAME == 'master' }
       }
