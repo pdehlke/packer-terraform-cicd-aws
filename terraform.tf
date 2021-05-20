@@ -1,10 +1,3 @@
-data "aws_ami" "default" {
-  most_recent = true
-  filter {
-    name   = "tag:SHA"
-    values = ["current"]
-  }
-}
 provider "aws" {
 }
 
@@ -13,6 +6,10 @@ variable "vpc_main_cidr" {
 }
 
 variable "vpc_dmz_cidr" {
+  type = "string"
+}
+
+variable "app_ami_sha" {
   type = "string"
 }
 
