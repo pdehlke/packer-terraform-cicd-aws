@@ -44,8 +44,8 @@ pipeline {
                           accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
           wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
-            sh "./scripts/build.sh base base"
-            sh "./scripts/build.sh app app base"
+            sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/build.sh base base"
+            sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/build.sh app app base"
           }
         }
       }
@@ -63,8 +63,8 @@ pipeline {
                           accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
           wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
-            sh "./scripts/tf-wrapper.sh -a plan"
-            sh "./scripts/tf-wrapper.sh -a apply"
+            sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/tf-wrapper.sh -a plan"
+            sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/tf-wrapper.sh -a apply"
             sh "cat output.json"
             stash name: 'terraform_output', includes: '**/output.json'
           }
@@ -77,7 +77,7 @@ pipeline {
                             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
             wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
-              sh "./scripts/tf-wrapper.sh -a destroy"
+              sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/tf-wrapper.sh -a destroy"
             }
           }
         }
@@ -124,7 +124,7 @@ pipeline {
                           accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
           wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
-            sh "./scripts/tf-wrapper.sh -a destroy"
+            sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/tf-wrapper.sh -a destroy"
           }
         }
       }
@@ -141,7 +141,7 @@ pipeline {
                           accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
           wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
-            sh "./scripts/tf-wrapper.sh -a plan"
+            sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/tf-wrapper.sh -a plan"
             stash name: 'terraform_plan', includes: 'plan/plan.out,.terraform/**'
           }
         }
@@ -168,7 +168,7 @@ pipeline {
                           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
           wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
             unstash 'terraform_plan'
-            sh "./scripts/tf-wrapper.sh -a apply"
+            sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/tf-wrapper.sh -a apply"
           }
         }
       }
