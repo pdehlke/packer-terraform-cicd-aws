@@ -19,6 +19,7 @@ source scripts/common.sh
 # check that the tools we require are present
 package_check
 
+env | sort
 #
 # base.sh DIR TARGET [BASE_NAME]
 DIR="$1"
