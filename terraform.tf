@@ -95,7 +95,7 @@ resource "aws_instance" "web" {
   ami           = "${data.aws_ami.centos.id}"
   instance_type = "t2.micro"
 
-  subnet_id                   = "${aws_subnet.dmz.id}"
+  subnet_id                   = "${module.vpc.public_subnets.0.id}"
   associate_public_ip_address = "true"
   vpc_security_group_ids      = ["${aws_security_group.web_dmz.id}"]
 
