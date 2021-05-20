@@ -43,7 +43,6 @@ shift "$((OPTIND-1))" # Shift off the options and optional --.
 package_check
 
 # check that we have AWS credentials
-env | sort
 check_aws_credentials
 
 GIT_BRANCH=$(get_git_branch)

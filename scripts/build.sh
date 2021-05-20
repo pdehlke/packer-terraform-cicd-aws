@@ -11,7 +11,7 @@
 set -e
 
 # debug - expand all commands
-set -x
+# set -x
 
 # load our helper functions
 source scripts/common.sh
@@ -19,7 +19,6 @@ source scripts/common.sh
 # check that the tools we require are present
 package_check
 
-env | sort
 #
 # base.sh DIR TARGET [BASE_NAME]
 DIR="$1"
