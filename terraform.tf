@@ -1,5 +1,4 @@
 provider "aws" {
-  version = "v2.70.0"
 }
 
 variable "vpc_main_cidr" {
