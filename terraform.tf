@@ -2,32 +2,32 @@ provider "aws" {
 }
 
 variable "vpc_main_cidr" {
-  type = "string"
+  type = string
 }
 
 variable "vpc_dmz_cidr" {
-  type = "string"
+  type = string
 }
 
 variable "app_ami_sha" {
-  type = "string"
+  type = string
 }
 
-resource "aws_vpc" "main" {
-  cidr_block = "${var.vpc_main_cidr}"
-}
+# resource "aws_vpc" "main" {
+#   cidr_block = var.vpc_main_cidr
+# }
 
-output "main_vpc_id" {
-  value = "${aws_vpc.main.id}"
-}
+# output "main_vpc_id" {
+#   value = aws_vpc.main.id
+# }
 
-resource "aws_vpc" "dmz" {
-  cidr_block = "${var.vpc_dmz_cidr}"
-}
+# resource "aws_vpc" "dmz" {
+#   cidr_block = var.vpc_dmz_cidr
+# }
 
-output "dmz_vpc_id" {
-  value = "${aws_vpc.dmz.id}"
-}
+# output "dmz_vpc_id" {
+#   value = aws_vpc.dmz.id
+# }
 
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
@@ -51,7 +51,7 @@ module "vpc" {
 resource "aws_security_group" "web_dmz" {
   name        = "Web DMZ"
   description = "Allow http and https inbound traffic"
-  vpc_id      = "${module.vpc.vpc_id}"
+  vpc_id      = module.vpc.vpc_id
 
   ingress {
     from_port   = 80
@@ -84,9 +84,9 @@ module "alb" {
 
   load_balancer_type = "application"
 
-  vpc_id          = "${module.vpc.vpc_id}"
-  subnets         = ["${module.vpc.public_subnets}"]
-  security_groups = ["${aws_security_group.web_dmz.id}"]
+  vpc_id          = module.vpc.vpc_id
+  subnets         = module.vpc.public_subnets
+  security_groups = [aws_security_group.web_dmz.id]
 
   # access_logs = {
   #   bucket = "my-alb-logs"
@@ -125,32 +125,32 @@ data "aws_ami" "centos" {
 
   filter {
     name   = "tag:SHA"
-    values = ["${var.app_ami_sha}"]
+    values = [var.app_ami_sha]
   }
 }
 
 resource "aws_instance" "web" {
-  ami           = "${data.aws_ami.centos.id}"
+  ami           = data.aws_ami.centos.id
   instance_type = "t2.micro"
 
-  subnet_id                   = "${module.vpc.public_subnets.0}"
+  subnet_id                   = module.vpc.public_subnets.0
   associate_public_ip_address = "true"
-  vpc_security_group_ids      = ["${aws_security_group.web_dmz.id}"]
+  vpc_security_group_ids      = [aws_security_group.web_dmz.id]
 
   tags = {
     Environment    = "dev"
     Name           = "HelloWorld"
-    Source_AMI     = "${data.aws_ami.centos.id}"
-    Source_AMI_SHA = "${var.app_ami_sha}"
+    Source_AMI     = data.aws_ami.centos.id
+    Source_AMI_SHA = var.app_ami_sha
   }
 }
 
 output "aws_instance_web_public_ip" {
-  value = "${aws_instance.web.public_ip}"
+  value = aws_instance.web.public_ip
 }
 
 output "alb_dns_name" {
-  value = "${module.alb.lb_dns_name}"
+  value = module.alb.lb_dns_name
 }
 
 
