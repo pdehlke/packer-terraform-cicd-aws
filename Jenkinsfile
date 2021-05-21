@@ -54,7 +54,7 @@ pipeline {
     stage('build test stack') {
       agent { docker { image 'pdehlke/hashicorp-pipeline:latest' } }
       when {
-        expression { env.BRANCH_NAME != 'master' }
+        expression { env.BRANCH_NAME == 'test' }
       }
       steps {
         checkout scm
@@ -91,7 +91,7 @@ pipeline {
         }
       }
       when {
-        expression { env.BRANCH_NAME != 'master' }
+        expression { env.BRANCH_NAME == 'test' }
       }
       steps {
         checkout scm
@@ -115,7 +115,7 @@ pipeline {
     stage('destroy test stack') {
       agent { docker { image 'pdehlke/hashicorp-pipeline:latest' } }
       when {
-        expression { env.BRANCH_NAME != 'master' }
+        expression { env.BRANCH_NAME == 'test' }
       }
       steps {
         checkout scm

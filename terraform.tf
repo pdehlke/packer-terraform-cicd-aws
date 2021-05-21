@@ -127,41 +127,6 @@ module "alb" {
 
   tags = local.tags_as_map
 }
-# module "alb" {
-#   source  = "terraform-aws-modules/alb/aws"
-#   version = "~> 6.0"
-
-#   name = "${local.name}-alb-http"
-
-#   load_balancer_type = "application"
-
-#   vpc_id          = module.vpc.vpc_id
-#   subnets         = module.vpc.public_subnets
-#   security_groups = [aws_security_group.web_dmz.id]
-
-#   # access_logs = {
-#   #   bucket = "my-alb-logs"
-#   # }
-
-#   target_groups = [
-#     {
-#       name_prefix      = "app-"
-#       backend_protocol = "HTTP"
-#       backend_port     = 80
-#       target_type      = "instance"
-#     }
-#   ]
-
-#   http_tcp_listeners = [
-#     {
-#       port               = 80
-#       protocol           = "HTTP"
-#       target_group_index = 0
-#     }
-#   ]
-
-#   tags = local.tags_as_map
-# }
 
 module "asg_sg" {
   source  = "terraform-aws-modules/security-group/aws"
@@ -199,6 +164,7 @@ module "asg" {
   image_id           = data.aws_ami.centos.id
   instance_type      = "t3.micro"
   capacity_rebalance = true
+  target_group_arns  = module.alb.target_group_arns
 
   initial_lifecycle_hooks = [
     {
@@ -270,28 +236,6 @@ data "aws_ami" "centos" {
     values = [var.app_ami_sha]
   }
 }
-
-
-
-# resource "aws_instance" "web" {
-#   ami           = data.aws_ami.centos.id
-#   instance_type = "t2.micro"
-
-#   subnet_id                   = module.vpc.public_subnets.0
-#   associate_public_ip_address = "true"
-#   vpc_security_group_ids      = [aws_security_group.web_dmz.id]
-
-#   tags = {
-#     Environment    = "dev"
-#     Name           = "HelloWorld"
-#     Source_AMI     = data.aws_ami.centos.id
-#     Source_AMI_SHA = var.app_ami_sha
-#   }
-# }
-
-# output "aws_instance_web_public_ip" {
-#   value = aws_instance.web.public_ip
-# }
 
 output "alb_dns_name" {
   value = module.alb.lb_dns_name
