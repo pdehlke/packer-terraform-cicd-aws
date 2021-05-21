@@ -165,6 +165,7 @@ module "asg" {
   instance_type      = "t3.micro"
   capacity_rebalance = true
   target_group_arns  = module.alb.target_group_arns
+  security_groups    = [module.asg_sg.security_group_id]
 
   initial_lifecycle_hooks = [
     {
