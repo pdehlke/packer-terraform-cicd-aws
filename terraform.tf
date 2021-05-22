@@ -159,7 +159,7 @@ module "asg" {
   vpc_zone_identifier = module.vpc.private_subnets
   min_size            = 0
   max_size            = 5
-  desired_capacity    = 2
+  desired_capacity    = 0
 
   image_id           = data.aws_ami.centos.id
   instance_type      = "t3.micro"
