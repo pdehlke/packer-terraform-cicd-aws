@@ -21,6 +21,8 @@ locals {
   }
 }
 
+resource "random_pet" "pet_name" {}
+
 provider "aws" {
   # Make it faster by skipping a few checks
   skip_get_ec2_platforms      = true
@@ -103,7 +105,7 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 6.0"
 
-  name_prefix = local.name_prefix
+  name = "local.name-${random_pet.pet_name.id}"
 
   vpc_id          = module.vpc.vpc_id
   subnets         = module.vpc.public_subnets
@@ -119,7 +121,7 @@ module "alb" {
 
   target_groups = [
     {
-      name             = local.name
+      name             = "local.name-${random_pet.pet_name.id}"
       backend_protocol = "HTTP"
       backend_port     = 80
       target_type      = "instance"
