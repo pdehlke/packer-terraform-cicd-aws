@@ -1,5 +1,6 @@
 locals {
-  name = "jenkins-testing"
+  name        = "jenkins-testing"
+  name_prefix = "jkns"
   tags = [
     {
       key                 = "Source_AMI"
@@ -102,7 +103,7 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 6.0"
 
-  name = local.name
+  name_prefix = local.name_prefix
 
   vpc_id          = module.vpc.vpc_id
   subnets         = module.vpc.public_subnets
