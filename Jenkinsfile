@@ -168,7 +168,7 @@ pipeline {
                           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
           wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
             unstash 'terraform_plan'
-            sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/tf-wrapper.sh -a destroy"
+            sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/tf-wrapper.sh -a apply"
           }
         }
       }
