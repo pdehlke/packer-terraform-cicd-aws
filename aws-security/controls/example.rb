@@ -12,7 +12,7 @@ describe aws_vpc(vpc_id) do
   # its('cidr_block') { should eq '172.18.0.0/16' }
 end
 
-describe aws_alb(alb) do
-  it { should exist }
-  # its('cidr_block') { should eq '172.19.0.0/16' }
-end
+# describe aws_alb(alb) do
+#   it { should exist }
+#   # its('cidr_block') { should eq '172.19.0.0/16' }
+# end
