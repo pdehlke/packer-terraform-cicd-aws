@@ -79,8 +79,8 @@ case "${TF_ACTION}" in
         ;;
     destroy)
         terraform destroy -var-file=${TF_VARS_FILE} -auto-approve
-        terraform workspace select default
-        terraform workspace delete ${TF_WORKSPACE}
+        # terraform workspace select default
+        # terraform workspace delete ${TF_WORKSPACE}
         ;;
 esac
 
