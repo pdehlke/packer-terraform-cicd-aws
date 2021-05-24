@@ -47,7 +47,7 @@ variable "app_ami_sha" {
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "my-vpc"
+  name = "${local.name}-${random_pet.pet_name.id}"
   cidr = "10.0.0.0/16"
 
   azs             = ["us-east-1a", "us-east-1b", "us-east-1c"]
@@ -92,7 +92,7 @@ module "alb_http_sg" {
   source  = "terraform-aws-modules/security-group/aws//modules/http-80"
   version = "~> 4.0"
 
-  name        = "${local.name}-alb-http"
+  name        = "${local.name}-${random_pet.pet_name.id}-alb-http"
   vpc_id      = module.vpc.vpc_id
   description = "Security group for ${local.name}"
 
@@ -135,7 +135,7 @@ module "asg_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = local.name
+  name        = "${local.name}-${random_pet.pet_name.id}"
   description = "ASG security group for ${local.name}"
   vpc_id      = module.vpc.vpc_id
 
@@ -157,7 +157,7 @@ module "asg" {
   version = "~> 4.0"
 
   # Autoscaling group
-  name = "mixed-instance-${local.name}"
+  name = "mixed-instance-${local.name}-${random_pet.pet_name.id}"
 
   vpc_zone_identifier = module.vpc.private_subnets
   min_size            = 0
