@@ -47,7 +47,7 @@ variable "app_ami_sha" {
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "${local.name}-${random_pet.pet_name.id}"
+  name = "${local.name_prefix}-${random_pet.pet_name.id}"
   cidr = "10.0.0.0/16"
 
   azs             = ["us-east-1a", "us-east-1b", "us-east-1c"]
@@ -92,9 +92,9 @@ module "alb_http_sg" {
   source  = "terraform-aws-modules/security-group/aws//modules/http-80"
   version = "~> 4.0"
 
-  name        = "${local.name}-${random_pet.pet_name.id}-alb-http"
+  name        = "${local.name_prefix}-${random_pet.pet_name.id}-alb-http"
   vpc_id      = module.vpc.vpc_id
-  description = "Security group for ${local.name}"
+  description = "Security group for ${local.name_prefix}"
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
 
@@ -105,7 +105,7 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 6.0"
 
-  name = "${local.name}-${random_pet.pet_name.id}"
+  name = "${local.name_prefix}-${random_pet.pet_name.id}"
 
   vpc_id          = module.vpc.vpc_id
   subnets         = module.vpc.public_subnets
@@ -121,7 +121,7 @@ module "alb" {
 
   target_groups = [
     {
-      name             = "${local.name}-${random_pet.pet_name.id}"
+      name             = "${local.name_prefix}-${random_pet.pet_name.id}"
       backend_protocol = "HTTP"
       backend_port     = 80
       target_type      = "instance"
@@ -135,8 +135,8 @@ module "asg_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = "${local.name}-${random_pet.pet_name.id}"
-  description = "ASG security group for ${local.name}"
+  name        = "${local.name_prefix}-${random_pet.pet_name.id}"
+  description = "ASG security group for ${local.name_prefix}"
   vpc_id      = module.vpc.vpc_id
 
   computed_ingress_with_source_security_group_id = [
@@ -157,7 +157,7 @@ module "asg" {
   version = "~> 4.0"
 
   # Autoscaling group
-  name = "mixed-instance-${local.name}-${random_pet.pet_name.id}"
+  name = "mixed-instance-${local.name_prefix}-${random_pet.pet_name.id}"
 
   vpc_zone_identifier = module.vpc.private_subnets
   min_size            = 0
