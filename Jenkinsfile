@@ -152,7 +152,9 @@ pipeline {
         expression { env.BRANCH_NAME == 'master' }
       }
       steps {
-        input 'Do you approve the apply?'
+        timeout(time: 1, unit: 'HOURS') {
+                    input 'Deploy to Production?'
+                }
       }
     }
     stage('terraform apply - master') {
