@@ -60,12 +60,12 @@ fi
 # create the S3 bucket, DynamoDB & matching backend.tf
 generate_terraform_backend
 
-# [[ ! -d .terraform ]] && terraform init
-terraform init
 # the workspace may already exist - safe to ignore & carry on
 terraform workspace new ${TF_WORKSPACE} || true
 echo "Selecting workspace: ${TF_WORKSPACE}"
 terraform workspace select ${TF_WORKSPACE}
+# [[ ! -d .terraform ]] && terraform init
+terraform init
 case "${TF_ACTION}" in
     plan)
         [[ ! -d plan ]] && mkdir plan
