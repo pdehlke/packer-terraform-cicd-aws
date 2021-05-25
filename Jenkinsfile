@@ -1,7 +1,9 @@
-// Declarative Jenkinsfile Pipeline for a Hashicorp packer/terraform AWS simple ec2 stack
-// (n.b. use of env.BRANCH_NAME to filter stages based on branch means this needs to be part
-// of a Multibranch Project in Jenkins - this fits with the model of branches/PR's being
-// tested & master being deployed)
+// Declarative Jenkinsfile Pipeline for a Hashicorp packer/terraform
+// AWS simple ec2 stack (n.b. use of env.BRANCH_NAME to filter stages
+// based on branch means this needs to be part of a Multibranch Project
+// in Jenkins - this fits with the model of branches/PR's being tested
+//  & master being deployed)
+//
 pipeline {
   agent any
   environment {
@@ -170,7 +172,7 @@ pipeline {
                           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY' ]]) {
           wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
             unstash 'terraform_plan'
-            sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/tf-wrapper.sh -a apply"
+            sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/tf-wrapper.sh -a destroy"
           }
         }
       }
