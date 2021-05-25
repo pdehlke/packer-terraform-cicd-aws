@@ -24,5 +24,5 @@ echo '---- install apache'
 DEBIAN_FRONTEND=noninteractive apt-get -y install apache2
 
 cat > /var/www/html/index.html <<HERE
-Your test config worked, pete!
+Your test config worked, pete! It's $(date)
 HERE
