@@ -15,4 +15,4 @@ echo "---- Update and Upgrade"
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y update
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y install apt-transport-https
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y install curl unzip zip jq
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install curl unzip zip jq zsh tmux
