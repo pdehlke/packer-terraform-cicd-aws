@@ -177,5 +177,18 @@ pipeline {
         }
       }
     }
+    stage('Write Changelog'){
+      when {
+        expression { env.BRANCH_NAME == 'master' }
+      }
+      steps{
+          script{
+              def changelogString = gitChangelog returnType: 'STRING',
+                  template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
+                  {{/commits}}"""
+              writeFile file: 'ChangeLog.txt', text: changelogString
+          }
+      }
+    }
   }
 }

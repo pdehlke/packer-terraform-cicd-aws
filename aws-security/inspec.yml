@@ -16,6 +16,6 @@ inputs:
   description: 'Optional Custom AWS VPC Id'
 depends:
   - name: inspec-aws
-    url: https://github.com/inspec/inspec-aws.git
+    url: https://github.com/inspec/inspec-aws/archive/refs/tags/v1.49.1.tar.gz
 supports:
   - platform: aws

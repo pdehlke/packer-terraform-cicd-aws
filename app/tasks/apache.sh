@@ -21,7 +21,7 @@ apt_wait
 DEBIAN_FRONTEND=noninteractive apt-get -y update
 apt_wait
 echo '---- install apache'
-DEBIAN_FRONTEND=noninteractive apt-get -y install apache2
+DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 ntp
 
 cat > /var/www/html/index.html <<HERE
 Your test config worked, pete! It's $(date)
