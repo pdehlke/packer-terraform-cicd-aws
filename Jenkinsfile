@@ -131,19 +131,6 @@ pipeline {
         }
       }
     }
-    stage('Write Changelog'){
-      when {
-        expression { env.BRANCH_NAME == 'test' }
-      }
-      steps{
-          script{
-              def changelogString = gitChangelog returnType: 'STRING',
-                  template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
-                  {{/commits}}"""
-              writeFile file: 'ChangeLog.txt', text: changelogString
-          }
-      }
-    }
     stage('terraform plan - master') {
       agent { docker { image 'pdehlke/hashicorp-pipeline:latest' } }
       when {
@@ -188,6 +175,19 @@ pipeline {
             sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ./scripts/tf-wrapper.sh -a apply"
           }
         }
+      }
+    }
+    stage('Write Changelog'){
+      when {
+        expression { env.BRANCH_NAME == 'master' }
+      }
+      steps{
+          script{
+              def changelogString = gitChangelog returnType: 'STRING',
+                  template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
+                  {{/commits}}"""
+              writeFile file: 'ChangeLog.txt', text: changelogString
+          }
       }
     }
   }
