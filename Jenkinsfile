@@ -131,6 +131,19 @@ pipeline {
         }
       }
     }
+    stage('Write Changelog'){
+      when {
+        expression { env.BRANCH_NAME == 'test' }
+      }
+      steps{
+          script{
+              def changelogString = gitChangelog returnType: 'STRING',
+                  template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
+                  {{/commits}}"""
+              writeFile file: 'ChangeLog.txt', text: changelogString
+          }
+      }
+    }
     stage('terraform plan - master') {
       agent { docker { image 'pdehlke/hashicorp-pipeline:latest' } }
       when {
