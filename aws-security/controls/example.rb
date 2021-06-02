@@ -15,6 +15,4 @@ end
 describe aws_alb(alb) do
   it { should exist }
 end
-# describe aws_albs do
-#   its('load_balancer_arns') { should include 'arn:aws:elasticloadbalancing' }
-# end
+
